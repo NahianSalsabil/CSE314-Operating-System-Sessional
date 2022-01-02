@@ -5,13 +5,13 @@
 
 using namespace std;
 
-#define global_variable 1
+#define global_variable 4
 #define number_of_passengers 10
 
 int M,N,P,w,x,y,z;
 sem_t kiosk, *belt;
-pthread_mutex_t *kiosk_mutex, **belt_mutex, boarding_mutex, vip_channel_mutex, global_var_mutex[global_variable];
-int* kiosk_index, **belt_index;
+pthread_mutex_t *kiosk_mutex, **belt_mutex, boarding_mutex, vip_channel_mutex, vip_channel_count, global_var_mutex[global_variable];
+int* kiosk_index, **belt_index, left_right = 0, right_left = 0;
 
 
 void* journey_by_air(void* arg)
@@ -48,49 +48,135 @@ void* journey_by_air(void* arg)
 	pthread_mutex_unlock(&global_var_mutex[0]);
 
 	pthread_mutex_lock(&kiosk_mutex[index]);
-	msg = "Passenger " + to_string(id) + " has started self-check in at kiosk " + to_string(index+1) + " at time\n";
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has started self-check in at kiosk " + to_string(index+1) + " at time\n";
+	}
+	else{
+		msg = "Passenger " + to_string(id) + " has started self-check in at kiosk " + to_string(index+1) + " at time\n";
+	}
 	cout << msg;
 	usleep(w);
-	msg = "Passenger " + to_string(id) + " has finished check in at time\n";
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has finished check in at time\n";
+	}
+	else{
+		msg = "Passenger " + to_string(id) + " has finished check in at time\n";
+	}
 	cout << msg;
 
 	// vip channel waiting
-	// if(vip == 1){
-	// 	msg = "Passenger " + to_string(id) + " (VIP) has started waiting for VIP channel at time\n";
-	// 	pthread_mutex_lock(&vip_channel_mutex);
-	// }
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has started waiting for VIP channel at time\n";
+		cout << msg;
+		pthread_mutex_lock(&global_var_mutex[2]);
+		if(left_right == 0){
+			pthread_mutex_lock(&vip_channel_mutex);
+		}	
+		left_right++;
+		pthread_mutex_unlock(&global_var_mutex[2]);
+	}
 
 	kiosk_index[index] = 0;
 	pthread_mutex_unlock(&kiosk_mutex[index]);
 	sem_post(&kiosk);
 
 	//security check or vip channel
-	// if(vip == 1){
-	// 	msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel\n";
-	// 	cout << msg;
-	// 	usleep(z);
-	// 	msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel\n";
-	// 	cout << msg;
-	// }
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel\n";
+		cout << msg;
+		usleep(z);
+		pthread_mutex_lock(&vip_channel_count);
+		msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel\n";
+		cout << msg;
+		left_right--;
+		if(left_right == 0){
+			pthread_mutex_unlock(&vip_channel_mutex);
+		}
+		pthread_mutex_unlock(&vip_channel_count);
+	}
 
-	//security check in belt
 	
 	//careless passenger
-	// int lost_pass = rand()%2;
-	// if(lost_pass == 1){
-	// 	msg = "Passenger " + to_string(id) + " has lost the boarding pass\n";
-	// 	cout << msg;
+	int lost_pass = rand()%2;
+	if(lost_pass == 1){
+		if(vip == 1){
+			msg = "Passenger " + to_string(id) + " (VIP) has lost the boarding pass\n";
+		}
+		else{
+			msg = "Passenger " + to_string(id) + " has lost the boarding pass\n";
+		}
+		cout << msg;
 
-	// }
+		//return to special kiosk
+		if(vip == 1){
+			msg = "Passenger " + to_string(id) + " (VIP) has started waiting for the VIP channel right to left\n";
+		}
+		else{
+			msg = "Passenger " + to_string(id) + " has started waiting for the VIP channel right to let\n";
+		}
+		cout << msg;
+
+		// right tp left vip channel check
+		pthread_mutex_lock(&global_var_mutex[3]);
+		if(right_left == 0){
+			pthread_mutex_lock(&vip_channel_mutex);
+		}
+		right_left++;
+		pthread_mutex_unlock(&global_var_mutex[3]);
+		
+		if(vip == 1){
+			msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel right to left\n";
+		}
+		else{
+			msg = "Passenger " + to_string(id) + " has started walking through the VIP channel right to let\n";
+		}
+		cout << msg;
+		
+
+		usleep(z);
+
+		pthread_mutex_lock(&vip_channel_count);
+		if(vip == 1){
+			msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel\n";
+		}
+		else{
+			msg = "Passenger " + to_string(id) + " has crossed the VIP channel\n";
+		}
+		cout << msg;
+		right_left--;
+		if(right_left == 0){
+			pthread_mutex_unlock(&vip_channel_mutex);
+		}
+		pthread_mutex_unlock(&vip_channel_count);
+
+	}
 	//boarding
-	msg = "Passenger " + to_string(id) + " has started waiting to be boarded at time\n";
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has started waiting to be boarded at time\n";
+	}
+	else{
+		msg = "Passenger " + to_string(id) + " has started waiting to be boarded at time\n";
+	}
 	cout << msg;
+
 	pthread_mutex_lock(&boarding_mutex);
-	msg = "Passenger " + to_string(id) + " has started boarding the plane at time\n";
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has started boarding the plane at time\n";
+	}
+	else{
+		msg = "Passenger " + to_string(id) + " has started boarding the plane at time\n";
+	}
 	cout << msg;
+
 	usleep(y);
-	msg = "Passenger " + to_string(id) + " has boarded the plane at time\n";
+	if(vip == 1){
+		msg = "Passenger " + to_string(id) + " (VIP) has boarded the plane at time\n";
+	}
+	else{
+		msg = "Passenger " + to_string(id) + " has boarded the plane at time\n";
+	}
 	cout << msg;
+
 	pthread_mutex_unlock(&boarding_mutex);
 }
 
@@ -176,10 +262,16 @@ int main(void)
 	}
 
 	//vip channel mutex
-	// return_value = pthread_mutex_init(&vip_channel_mutex, NULL);
-	// if(return_value != 0) {
-	// 	cout << "vip channel mutex initialization failed\n";
-	// }
+	return_value = pthread_mutex_init(&vip_channel_mutex, NULL);
+	if(return_value != 0) {
+		cout << "vip channel mutex initialization failed\n";
+	}
+
+	//vip channel count
+	return_value = pthread_mutex_init(&vip_channel_count, NULL);
+	if(return_value != 0) {
+		cout << "vip channel count mutex initialization failed\n";
+	}
 
 	//global variable mutex
 	for(int i = 0; i < global_variable; i++){
@@ -256,10 +348,16 @@ int main(void)
 
 	//
 	//vip channel mutex
-	// return_value = pthread_mutex_destroy(&vip_channel_mutex);
-	// if(return_value != 0) {
-	// 	cout << "vip channel mutex destruction failed\n";
-	// }
+	return_value = pthread_mutex_destroy(&vip_channel_mutex);
+	if(return_value != 0) {
+		cout << "vip channel mutex destruction failed\n";
+	}
+
+	//vip channel count
+	return_value = pthread_mutex_destroy(&vip_channel_count);
+	if(return_value != 0) {
+		cout << "vip channel count mutex destruction failed\n";
+	}
 
 	//global variable mutex
 	for(int i = 0; i < global_variable; i++){

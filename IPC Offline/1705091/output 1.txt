@@ -1,0 +1,114 @@
+3 2 5
+8 10 12 14
+input taken
+mutex initialized
+thread 1 created
+thread 2 created
+thread 3 created
+thread 4 created
+Passenger 2 has arrived
+Passenger 2 has started self-check in at kiosk 1 at time
+Passenger 3 (VIP) has arrived
+Passenger 3 (VIP) has started self-check in at kiosk 2 at time
+Passenger 1 has arrived
+Passenger 1 has started self-check in at kiosk 3 at time
+Passenger 3 (VIP) has finished check in at time
+Passenger 3 (VIP) has started waiting for VIP channel at time
+Passenger 3 (VIP) has started walking through the VIP channel
+Passenger 2 has finished check in at time
+Passenger 2 has lost the boarding pass
+Passenger 2 has started waiting for the VIP channel right to let
+Passenger 3 (VIP) has crossed the VIP channel
+Passenger 1 has finished check in at time
+Passenger 1 has lost the boarding pass
+Passenger 1 has started waiting for the VIP channel right to let
+thread 5 created
+Passenger 2 has started walking through the VIP channel right to let
+Passenger 4 has arrived
+Passenger 4 has started self-check in at kiosk 1 at time
+Passenger 2 has crossed the VIP channel
+thread 6 created
+Passenger 1 has started walking through the VIP channel right to let
+Passenger 4 has finished check in at time
+Passenger 2 has started waiting to be boarded at time
+Passenger 3 (VIP) has lost the boarding pass
+Passenger 5 (VIP) has arrived
+Passenger 1 has crossed the VIP channel
+Passenger 1 has started waiting to be boarded at time
+Passenger 6 has arrived
+Passenger 6 has started self-check in at kiosk 2 at time
+Passenger 6 has finished check in at time
+Passenger 6 has started waiting to be boarded at time
+Passenger 3 (VIP) has started waiting for the VIP channel right to left
+Passenger 5 (VIP) has started self-check in at kiosk 1 at time
+Passenger 4 has started waiting to be boarded at time
+thread 7 created
+Passenger 5 (VIP) has finished check in at time
+Passenger 5 (VIP) has started waiting for VIP channel at time
+Passenger 2 has started boarding the plane at time
+Passenger 3 (VIP) has started walking through the VIP channel right to left
+thread 8 created
+Passenger 2 has boarded the plane at time
+Passenger 1 has started boarding the plane at time
+Passenger 7 (VIP) has arrived
+Passenger 3 (VIP) has crossed the VIP channel
+Passenger 7 (VIP) has started self-check in at kiosk 2 at time
+Passenger 8 has arrived
+Passenger 1 has boarded the plane at time
+Passenger 8 has started self-check in at kiosk 1 at time
+thread 9 created
+Passenger 6 has started boarding the plane at time
+Passenger 5 (VIP) has started walking through the VIP channel
+Passenger 3 (VIP) has started waiting to be boarded at time
+thread 10 created
+Passenger 6 has boarded the plane at time
+Passenger 5 (VIP) has crossed the VIP channel
+Passenger 4 has started boarding the plane at time
+initialized
+Passenger 7 (VIP) has finished check in at time
+Passenger 10 (VIP) has arrived
+Passenger 4 has boarded the plane at time
+(null)(null)Passenger 7 (VIP) has started waiting for VIP channel at time
+Passenger 7 (VIP) has started walking through the VIP channel
+Passenger 8 has finished check in at time
+Passenger 5 (VIP) has started waiting to be boarded at time
+Passenger 5 (VIP) has started boarding the plane at time
+Passenger 10 (VIP) has started self-check in at kiosk 3 at time
+Passenger 7 (VIP) has crossed the VIP channel
+Passenger 8 has lost the boarding pass
+Passenger 5 (VIP) has boarded the plane at time
+Passenger 8 has started waiting for the VIP channel right to let
+Passenger 3 (VIP) has started boarding the plane at time
+Passenger 10 (VIP) has finished check in at time
+Passenger 9 (VIP) has arrived
+Passenger 3 (VIP) has boarded the plane at time
+Passenger 7 (VIP) has lost the boarding pass
+(null)(null)Passenger 7 (VIP) has started waiting for the VIP channel right to left
+Passenger 7 (VIP) has started walking through the VIP channel right to left
+Passenger 8 has started walking through the VIP channel right to let
+Passenger 9 (VIP) has started self-check in at kiosk 1 at time
+Passenger 10 (VIP) has started waiting for VIP channel at time
+(null)Passenger 9 (VIP) has finished check in at time
+Passenger 9 (VIP) has started waiting for VIP channel at time
+Passenger 7 (VIP) has crossed the VIP channel
+(null)Passenger 7 (VIP) has started waiting to be boarded at time
+Passenger 7 (VIP) has started boarding the plane at time
+Passenger 8 has crossed the VIP channel
+Passenger 8 has started waiting to be boarded at time
+Passenger 10 (VIP) has started walking through the VIP channel
+Passenger 7 (VIP) has boarded the plane at time
+Passenger 9 (VIP) has started walking through the VIP channel
+Passenger 8 has started boarding the plane at time
+Passenger 10 (VIP) has crossed the VIP channel
+(null)Passenger 8 has boarded the plane at time
+Passenger 10 (VIP) has started waiting to be boarded at time
+Passenger 9 (VIP) has crossed the VIP channel
+Passenger 10 (VIP) has started boarding the plane at time
+(null)Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left
+Passenger 9 (VIP) has started walking through the VIP channel right to left
+Passenger 10 (VIP) has boarded the plane at time
+Passenger 9 (VIP) has crossed the VIP channel
+Passenger 9 (VIP) has started waiting to be boarded at time
+Passenger 9 (VIP) has started boarding the plane at time
+Passenger 9 (VIP) has boarded the plane at time
