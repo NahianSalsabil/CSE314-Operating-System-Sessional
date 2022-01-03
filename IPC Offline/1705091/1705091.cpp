@@ -9,9 +9,9 @@ using namespace std;
 #define number_of_passengers 10
 
 int M,N,P,w,x,y,z;
-sem_t kiosk, *belt;
-pthread_mutex_t *kiosk_mutex, **belt_mutex, boarding_mutex, vip_channel_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
-int* kiosk_index, **belt_index, left_right = 0, right_left = 0;
+sem_t kiosk, belt;
+pthread_mutex_t *kiosk_mutex, *belt_mutex, boarding_mutex, vip_channel_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
+int* kiosk_index, *belt_index, left_right = 0, right_left = 0;
 
 
 void* journey_by_air(void* arg)
@@ -82,7 +82,7 @@ void* journey_by_air(void* arg)
 	pthread_mutex_unlock(&kiosk_mutex[index]);
 	sem_post(&kiosk);
 
-	//security check or vip channel
+	//vip channel
 	if(vip == 1){
 		msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel\n";
 		cout << msg;
@@ -95,6 +95,39 @@ void* journey_by_air(void* arg)
 			pthread_mutex_unlock(&vip_channel_mutex);
 		}
 		pthread_mutex_unlock(&vip_channel_count);
+	}
+
+	// security check
+	else if(vip == 0){
+		sem_wait(&belt);
+		
+		//find out which belt is available
+		pthread_mutex_lock(&global_var_mutex[1]);
+		for(int i = 0; i < N; i++){
+			if(belt_index[i] < P){
+				index = i;
+				belt_index[i]++;
+				break;
+			}
+		}
+		pthread_mutex_unlock(&global_var_mutex[1]);
+
+		if(belt_index[index] == P){
+			pthread_mutex_lock(&belt_mutex[index]);
+		}
+		msg = "Passenger " + to_string(id) + " has started waiting for security check in belt " + to_string(index+1) + " from time\n"; 
+		cout << msg;
+		msg = "Passenger " + to_string(id) + " has started the security check at time\n";
+		cout << msg;
+		usleep(x);
+		msg = "Passenger " + to_string(id) + " has crossed the security check at time\n";
+		cout << msg;
+
+		belt_index[index]--;
+		if(belt_index[index] == P-1){
+			pthread_mutex_unlock(&belt_mutex[index]);
+		}
+		sem_post(&belt);
 	}
 
 	
@@ -208,28 +241,22 @@ int main(void)
 	}
 	
 	//belt index
-	belt_index = new int*[N];
+	belt_index = new int[N];
 	for(int i = 0; i < N; i++){
-		belt_index[i] = new int[P];
-	}
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < P; j++){
-			belt_index[i][j] = 0;
-		}
+		belt_index[i] = 0;
 	}
 
 	// semaphore initialization
+	// kiosk
 	return_value = sem_init(&kiosk,0,M);
 	if(return_value != 0) {
 		cout << "kiosk semaphore initialization failed\n";
 	}
 
-	belt = new sem_t[N];
-	for(int i = 0; i < N; i++){
-		return_value = sem_init(&belt[i],0,P);
-		if(return_value != 0) {
-			cout << "belt semaphore initialization failed\n";
-		}
+	//belt
+	return_value = sem_init(&belt,0,N*P);
+	if(return_value != 0) {
+		cout << "belt semaphore initialization failed\n";
 	}
 	
 	// mutex initialization
@@ -244,18 +271,14 @@ int main(void)
 	}
 
 	//belt mutex
-	belt_mutex = new pthread_mutex_t*[N];
+	belt_mutex = new pthread_mutex_t[N];
 	for(int i = 0; i < N; i++){
-		belt_mutex[i] = new pthread_mutex_t[P];
-	}
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < P; j++){
-			return_value = pthread_mutex_init(&belt_mutex[i][j],NULL);
-			if(return_value != 0) {
-				msg = "security check mutex[" + to_string(i) + "][" + to_string(j) + " initialization failed\n";
-				cout << msg;
-			}
+		return_value = pthread_mutex_init(&belt_mutex[i],NULL);
+		if(return_value != 0) {
+			msg = "security check mutex " + to_string(i) + " initialization failed\n";
+			cout << msg;
 		}
+		
 	}
 
 	//boarding mutex
@@ -322,12 +345,12 @@ int main(void)
 		cout << "kiosk semaphore destruction failed\n";
 	}
 
-	for(int i = 0; i < N; i++){
-		return_value = sem_destroy(&belt[i]);
-		if(return_value != 0) {
-			cout << "belt semaphore destruction failed\n";
-		}
+	
+	return_value = sem_destroy(&belt);
+	if(return_value != 0) {
+		cout << "belt semaphore destruction failed\n";
 	}
+	
 
 	// mutex destruction
 	// kiosk mutex
@@ -340,12 +363,10 @@ int main(void)
 
 	//belt mutex
 	for(int i = 0; i < N; i++){
-		for(int j = 0; j < P; j++){
-			return_value = pthread_mutex_destroy(&belt_mutex[i][j]);
-			if(return_value != 0) {
-				msg = "belt mutex[" + to_string(i) + "][" + to_string(j) + " destruction failed\n";
-				cout << msg;
-			}
+		return_value = pthread_mutex_destroy(&belt_mutex[i]);
+		if(return_value != 0) {
+			msg = "belt mutex " + to_string(i) + " destruction failed\n";
+			cout << msg;
 		}
 	}
 
@@ -382,7 +403,5 @@ int main(void)
 			cout << msg;
 		}
 	}
-
-
 	return 0;
 }
