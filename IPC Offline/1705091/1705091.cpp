@@ -10,7 +10,7 @@ using namespace std;
 
 int M,N,P,w,x,y,z;
 sem_t kiosk, *belt;
-pthread_mutex_t *kiosk_mutex, **belt_mutex, boarding_mutex, vip_channel_mutex, vip_channel_count, global_var_mutex[global_variable];
+pthread_mutex_t *kiosk_mutex, **belt_mutex, boarding_mutex, vip_channel_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
 int* kiosk_index, **belt_index, left_right = 0, right_left = 0;
 
 
@@ -65,6 +65,7 @@ void* journey_by_air(void* arg)
 	cout << msg;
 
 	// vip channel waiting
+	pthread_mutex_lock(&extra_mutex);
 	if(vip == 1){
 		msg = "Passenger " + to_string(id) + " (VIP) has started waiting for VIP channel at time\n";
 		cout << msg;
@@ -75,6 +76,7 @@ void* journey_by_air(void* arg)
 		left_right++;
 		pthread_mutex_unlock(&global_var_mutex[2]);
 	}
+	pthread_mutex_unlock(&extra_mutex);
 
 	kiosk_index[index] = 0;
 	pthread_mutex_unlock(&kiosk_mutex[index]);
@@ -112,11 +114,12 @@ void* journey_by_air(void* arg)
 			msg = "Passenger " + to_string(id) + " (VIP) has started waiting for the VIP channel right to left\n";
 		}
 		else{
-			msg = "Passenger " + to_string(id) + " has started waiting for the VIP channel right to let\n";
+			msg = "Passenger " + to_string(id) + " has started waiting for the VIP channel right to left\n";
 		}
 		cout << msg;
 
 		// right tp left vip channel check
+		pthread_mutex_lock(&extra_mutex);
 		pthread_mutex_lock(&global_var_mutex[3]);
 		if(right_left == 0){
 			pthread_mutex_lock(&vip_channel_mutex);
@@ -128,10 +131,10 @@ void* journey_by_air(void* arg)
 			msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel right to left\n";
 		}
 		else{
-			msg = "Passenger " + to_string(id) + " has started walking through the VIP channel right to let\n";
+			msg = "Passenger " + to_string(id) + " has started walking through the VIP channel right to left\n";
 		}
 		cout << msg;
-		
+		pthread_mutex_unlock(&extra_mutex);
 
 		usleep(z);
 
@@ -273,6 +276,12 @@ int main(void)
 		cout << "vip channel count mutex initialization failed\n";
 	}
 
+	//extra mutex
+	return_value = pthread_mutex_init(&extra_mutex, NULL);
+	if(return_value != 0) {
+		cout << "extra mutex initialization failed\n";
+	}
+
 	//global variable mutex
 	for(int i = 0; i < global_variable; i++){
 		return_value = pthread_mutex_init(&global_var_mutex[i],NULL);
@@ -357,6 +366,12 @@ int main(void)
 	return_value = pthread_mutex_destroy(&vip_channel_count);
 	if(return_value != 0) {
 		cout << "vip channel count mutex destruction failed\n";
+	}
+
+	//extra mutex
+	return_value = pthread_mutex_destroy(&vip_channel_count);
+	if(return_value != 0) {
+		cout << "extra mutex destruction failed\n";
 	}
 
 	//global variable mutex
