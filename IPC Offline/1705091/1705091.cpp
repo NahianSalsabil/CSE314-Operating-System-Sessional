@@ -2,51 +2,66 @@
 #include<pthread.h>
 #include <unistd.h>
 #include<semaphore.h>
-
+#include <chrono>
+#include <ctime>
 using namespace std;
 
 #define global_variable 4
-#define number_of_passengers 10
+#define loop 10
+default_random_engine generator;
+poisson_distribution<int> distribution(4.1);
 
-int M,N,P,w,x,y,z;
+time_t start_time;
+time_t central_time = 0;
+
+int passenger_count = 0, number_of_passengers = 10, M,N,P,w,x,y,z;
 sem_t kiosk, belt;
 pthread_mutex_t *kiosk_mutex, *belt_mutex, boarding_mutex, vip_channel_mutex, special_kiosk_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
 int* kiosk_index, *belt_index, left_right = 0, right_left = 0;
 
-void vip_channel_waiting(string msg, int vip, int id){
-	pthread_mutex_lock(&extra_mutex);
-		if(vip == 1){
-			msg = "Passenger " + to_string(id) + " (VIP) has started waiting for VIP channel at time\n";
-			cout << msg;
-			pthread_mutex_lock(&global_var_mutex[2]);
-				if(left_right == 0){
-					pthread_mutex_lock(&vip_channel_mutex);
-				}	
-				left_right++;
-			pthread_mutex_unlock(&global_var_mutex[2]);
-		}
-	pthread_mutex_unlock(&extra_mutex);
+time_t current_time(){
+	return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 }
 
-void vip_channel_crossing(string msg, int id){
-	msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel\n";
+time_t vip_channel_waiting(string msg, int vip, int id, time_t now_diff){
+	pthread_mutex_lock(&extra_mutex);
+		now_diff += 1;
+		msg = "Passenger " + to_string(id) + " (VIP) has started waiting for VIP channel at time " + to_string(now_diff) + "\n";
+		cout << msg;
+		pthread_mutex_lock(&global_var_mutex[2]);
+			if(left_right == 0){
+				pthread_mutex_lock(&vip_channel_mutex);
+			}	
+			left_right++;
+		pthread_mutex_unlock(&global_var_mutex[2]);
+	pthread_mutex_unlock(&extra_mutex);
+	return now_diff;
+}
+
+time_t vip_channel_crossing(string msg, int id, time_t now_diff){
+	time_t updated_time = difftime(current_time(), start_time);
+	if(updated_time > now_diff-1) now_diff = updated_time;
+	msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel at time " + to_string(now_diff) + "\n";
 	cout << msg;
 
-	usleep(z);
+	sleep(z);
+	now_diff += z;
 
 	pthread_mutex_lock(&vip_channel_count);
-		msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel\n";
+		msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel at time " + to_string(now_diff) + "\n";
 		cout << msg;
 		left_right--;
 		if(left_right == 0){
 			pthread_mutex_unlock(&vip_channel_mutex);
 		}
 	pthread_mutex_unlock(&vip_channel_count);
+	return now_diff;
 }
 
 
 void* journey_by_air(void* arg)
 {
+	time_t now_diff;
 	string msg;
 	int sem_value, index;
 	int id = *((int*) arg);
@@ -55,8 +70,8 @@ void* journey_by_air(void* arg)
 	int vip = rand()%2;
 
 	//passenge arrival
-	if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has arrived\n";
-	else msg = "Passenger " + to_string(id) + " has arrived\n";
+	if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has arrived at time " + to_string(difftime(current_time(), start_time)) + "\n";
+	else msg = "Passenger " + to_string(id) + " has arrived at time " + to_string(difftime(current_time(), start_time)) + "\n";
 	cout << msg;
 
 	//kiosk check in
@@ -73,28 +88,33 @@ void* journey_by_air(void* arg)
 		pthread_mutex_unlock(&global_var_mutex[0]);
 
 		pthread_mutex_lock(&kiosk_mutex[index]);
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started self-check in at kiosk " + to_string(index+1) + " at time\n";
-			else msg = "Passenger " + to_string(id) + " has started self-check in at kiosk " + to_string(index+1) + " at time\n";
+			now_diff = difftime(current_time(), start_time);
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started self-check in at kiosk " + to_string(index+1) + " at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has started self-check in at kiosk " + to_string(index+1) + " at time " + to_string(now_diff) + "\n";
 			cout << msg;
 
-			usleep(w);
-
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has finished check in at time\n";
-			else msg = "Passenger " + to_string(id) + " has finished check in at time\n";
+			sleep(w);
+			
+			now_diff += w;
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has finished check in at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has finished check in at time " + to_string(now_diff) + "\n";
 			cout << msg;
 
 			// vip channel waiting
-			vip_channel_waiting(msg, vip, id);
+			if(vip == 1)	now_diff = vip_channel_waiting(msg, vip, id, now_diff);
 
 			kiosk_index[index] = 0;
 		pthread_mutex_unlock(&kiosk_mutex[index]);
 	sem_post(&kiosk);
 
 	//vip channel
-	if(vip == 1) vip_channel_crossing(msg, id);
+	if(vip == 1) now_diff = vip_channel_crossing(msg, id, now_diff);
 
 	// security check
 	else if(vip == 0){
+		now_diff += 1;
+		msg = "Passenger " + to_string(id) + " has started waiting for security check from time " + to_string(now_diff) + "\n"; 
+		cout << msg;
 		sem_wait(&belt);
 			//find out which belt is available
 			pthread_mutex_lock(&global_var_mutex[1]);
@@ -110,15 +130,18 @@ void* journey_by_air(void* arg)
 			if(belt_index[index] == P){
 				pthread_mutex_lock(&belt_mutex[index]);
 			}
-					msg = "Passenger " + to_string(id) + " has started waiting for security check in belt " + to_string(index+1) + " from time\n"; 
-					cout << msg;
-					msg = "Passenger " + to_string(id) + " has started the security check at time\n";
-					cout << msg;
-					usleep(x);
-					msg = "Passenger " + to_string(id) + " has crossed the security check at time\n";
-					cout << msg;
+				time_t updated_time = difftime(current_time(), start_time);
+				if(updated_time > now_diff-1) now_diff = updated_time;
+				msg = "Passenger " + to_string(id) + " has started the security check at belt " + to_string(index+1) + " at time " + to_string(now_diff) + "\n";
+				cout << msg;
 
-					belt_index[index]--;
+				sleep(x);
+				now_diff += x;
+				
+				msg = "Passenger " + to_string(id) + " has crossed the security check at time " + to_string(now_diff) + "\n";
+				cout << msg;
+
+				belt_index[index]--;
 			if(belt_index[index] == P-1){
 				pthread_mutex_unlock(&belt_mutex[index]);
 			}
@@ -133,8 +156,9 @@ void* journey_by_air(void* arg)
 		cout << msg;
 
 		//return to special kiosk
-		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started waiting for the VIP channel right to left\n";
-		else msg = "Passenger " + to_string(id) + " has started waiting for the VIP channel right to left\n";
+		now_diff += 1;
+		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started waiting for the VIP channel right to left at time " + to_string(now_diff) + "\n";
+		else msg = "Passenger " + to_string(id) + " has started waiting for the VIP channel right to left at time " + to_string(now_diff) + "\n";
 		cout << msg;
 
 		// right to left vip channel check
@@ -145,17 +169,22 @@ void* journey_by_air(void* arg)
 				}
 				right_left++;
 			pthread_mutex_unlock(&global_var_mutex[3]);
-			
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel right to left\n";
-			else msg = "Passenger " + to_string(id) + " has started walking through the VIP channel right to left\n";
+
+			time_t updated_time = difftime(current_time(), start_time);
+			string timeprint = "updated time: " + to_string(updated_time) + "\n";
+			cout << timeprint;
+			if(updated_time > now_diff-1) now_diff = updated_time;
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started walking through the VIP channel right to left at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has started walking through the VIP channel right to left at time " + to_string(now_diff) + "\n";
 			cout << msg;
 		pthread_mutex_unlock(&extra_mutex);
 
-		usleep(z);
+		sleep(z);
+		now_diff += z;
 
 		pthread_mutex_lock(&vip_channel_count);
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel right to left\n";
-			else msg = "Passenger " + to_string(id) + " has crossed the VIP channel right to left\n";
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel right to left at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has crossed the VIP channel right to left at time " + to_string(now_diff) + "\n";
 			cout << msg;
 
 			right_left--;
@@ -166,45 +195,52 @@ void* journey_by_air(void* arg)
 
 		//special kiosk service
 		pthread_mutex_lock(&special_kiosk_mutex);
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started self-check in at special kiosk\n";
-			else msg = "Passenger " + to_string(id) + " has started self-check in at special kiosk\n";
+			now_diff += 1;
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started self-check in at special kiosk at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has started self-check in at special kiosk at time " + to_string(now_diff) + "\n";
 			cout << msg;
 
-			usleep(w);
+			sleep(w);
+			now_diff += w;
 
-			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has finished check in at special kiosk\n";
-			else msg = "Passenger " + to_string(id) + " has finished check in at special kiosk\n";
+			if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has finished check in at special kiosk at time " + to_string(now_diff) + "\n";
+			else msg = "Passenger " + to_string(id) + " has finished check in at special kiosk at time " + to_string(now_diff) + "\n";
 			cout << msg;
 
 			// vip channel waiting
-			vip_channel_waiting(msg, vip, id);
+			now_diff = vip_channel_waiting(msg, vip, id, now_diff);
 
 		pthread_mutex_unlock(&special_kiosk_mutex);
 
 		//vip channel
-		if(vip == 1) vip_channel_crossing(msg, id);
+		now_diff = vip_channel_crossing(msg, id, now_diff);
 	}
 
 	//boarding
-	if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started waiting to be boarded at time\n";
-	else msg = "Passenger " + to_string(id) + " has started waiting to be boarded at time\n";
+	now_diff += 1;
+	if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started waiting to be boarded at time " + to_string(now_diff) + "\n";
+	else msg = "Passenger " + to_string(id) + " has started waiting to be boarded at time " + to_string(now_diff) + "\n";
 	cout << msg;
 
 	pthread_mutex_lock(&boarding_mutex);
-		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started boarding the plane at time\n";
-		else msg = "Passenger " + to_string(id) + " has started boarding the plane at time\n";
+		time_t updated_time = difftime(current_time(), start_time);
+		if(updated_time > now_diff-1) now_diff = updated_time;
+		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has started boarding the plane at time " + to_string(now_diff) + "\n";
+		else msg = "Passenger " + to_string(id) + " has started boarding the plane at time " + to_string(now_diff) + "\n";
 		cout << msg;
 
-		usleep(y);
+		sleep(y);
+		now_diff += y;
 
-		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has boarded the plane at time\n";
-		else msg = "Passenger " + to_string(id) + " has boarded the plane at time\n";
+		if(vip == 1) msg = "Passenger " + to_string(id) + " (VIP) has boarded the plane at time " + to_string(now_diff) + "\n";
+		else msg = "Passenger " + to_string(id) + " has boarded the plane at time " + to_string(now_diff) + "\n";
 		cout << msg;
 	pthread_mutex_unlock(&boarding_mutex);
 }
 
 int main(void)
 {
+	start_time = current_time();
 	srand(time(0));
     freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
@@ -306,7 +342,7 @@ int main(void)
 		cout << msg;
 		return_value = pthread_create(&passengers[i], NULL, journey_by_air, (void*)id);
 		if(return_value != 0) {
-			msg = "passenger " + to_string(i) + " thread creation failed\n";
+			msg = "passenger " + to_string(i+1) + " thread creation failed\n";
 			cout << msg;
 		}
 	}
