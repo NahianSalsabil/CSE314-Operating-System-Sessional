@@ -7,15 +7,21 @@
 using namespace std;
 
 #define global_variable 4
-default_random_engine generator;
-poisson_distribution<int> distribution(4.1);
+// default_random_engine generator;
+// poisson_distribution<int> distribution(4.1);
+
+std::random_device rd; 
+std::mt19937 rng (rd ());
+double averageArrival = 20;
+double lamda = averageArrival/60;
+std::exponential_distribution<double> expon (lamda);
 
 time_t start_time;
 
 int arrival_time, number_of_passengers = 10, M,N,P,w,x,y,z;
-sem_t kiosk, belt;
-pthread_mutex_t *kiosk_mutex, *belt_mutex, boarding_mutex, vip_channel_mutex, special_kiosk_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
-int* kiosk_index, *belt_index, left_right = 0, right_left = 0;
+sem_t kiosk, *belt;
+pthread_mutex_t *kiosk_mutex, boarding_mutex, vip_channel_mutex, special_kiosk_mutex, vip_channel_count, extra_mutex, global_var_mutex[global_variable];
+int* kiosk_index, left_right = 0, right_left = 0;
 
 time_t current_time(){
 	return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -33,8 +39,6 @@ void vip_channel_waiting(string msg, int vip, int id, time_t now_diff){
 				pthread_mutex_lock(&vip_channel_mutex);
 			}	
 			left_right++;
-			string prn = "left right: " + to_string(left_right) + "\n";
-			cout << prn;
 		pthread_mutex_unlock(&global_var_mutex[2]);
 	pthread_mutex_unlock(&extra_mutex);
 }
@@ -50,12 +54,10 @@ time_t vip_channel_crossing(string msg, int id, time_t now_diff){
 	now_diff += z;
 
 	pthread_mutex_lock(&vip_channel_count);
-
 		msg = "Passenger " + to_string(id) + " (VIP) has crossed the VIP channel at time " + to_string(now_diff) + "\n";
 		cout << msg;
 		left_right--;
 		if(left_right == 0){
-			cout << "unlock korse\n";
 			pthread_mutex_unlock(&vip_channel_mutex);
 		}
 	pthread_mutex_unlock(&vip_channel_count);
@@ -119,39 +121,21 @@ void* journey_by_air(void* arg)
 
 	// security check
 	else if(vip == 0){
-		msg = "Passenger " + to_string(id) + " has started waiting for security check from time " + to_string(now_diff) + "\n"; 
+        int belt_index = rand()%N + 1;
+		msg = "Passenger " + to_string(id) + " has started waiting for security check at belt " + to_string(belt_index) + " from time " + to_string(now_diff) + "\n"; 
 		cout << msg;
-		sem_wait(&belt);
-			//find out which belt is available
-			pthread_mutex_lock(&global_var_mutex[1]);
-				for(int i = 0; i < N; i++){
-					if(belt_index[i] < P){
-						index = i;
-						belt_index[i]++;
-						break;
-					}
-				}
-			pthread_mutex_unlock(&global_var_mutex[1]);
+		sem_wait(&belt[belt_index-1]);
+            time_t updated_time = difftime(current_time(), start_time);
+            if(updated_time > now_diff-1) now_diff = updated_time;
+            msg = "Passenger " + to_string(id) + " has started the security check at belt " + to_string(belt_index) + " at time " + to_string(now_diff) + "\n";
+            cout << msg;
 
-			if(belt_index[index] == P){
-				pthread_mutex_lock(&belt_mutex[index]);
-			}
-				time_t updated_time = difftime(current_time(), start_time);
-				if(updated_time > now_diff-1) now_diff = updated_time;
-				msg = "Passenger " + to_string(id) + " has started the security check at belt " + to_string(index+1) + " at time " + to_string(now_diff) + "\n";
-				cout << msg;
+            sleep(x);
+            now_diff += x;
 
-				sleep(x);
-				now_diff += x;
-
-				msg = "Passenger " + to_string(id) + " has crossed the security check at time " + to_string(now_diff) + "\n";
-				cout << msg;
-
-				belt_index[index]--;
-			if(belt_index[index] == P-1){
-				pthread_mutex_unlock(&belt_mutex[index]);
-			}
-		sem_post(&belt);
+            msg = "Passenger " + to_string(id) + " has crossed the security check at time " + to_string(now_diff) + "\n";
+            cout << msg;
+		sem_post(&belt[belt_index-1]);
 	}
 
 	//careless passenger
@@ -245,7 +229,7 @@ int main(void)
 	start_time = current_time();
 	srand(time(0));
     freopen("input.txt", "r", stdin);
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
 
 	int return_value;
 	string msg;
@@ -256,18 +240,13 @@ int main(void)
 	cout << M << " " << N << " " << P << endl;
 	cout << w << " " << x << " " << y << " " << z << endl;
 
-	cout << "input taken\n";
+	// cout << "input taken\n";
 
 	//global variable initilization
 	//kiosk index
 	kiosk_index = new int[M];
 	for(int i = 0; i < M; i++){
 		kiosk_index[i] = 0;
-	}
-	//belt index
-	belt_index = new int[N];
-	for(int i = 0; i < N; i++){
-		belt_index[i] = 0;
 	}
 
 	// semaphore initialization
@@ -277,10 +256,13 @@ int main(void)
 		cout << "kiosk semaphore initialization failed\n";
 	}
 	//belt
-	return_value = sem_init(&belt,0,N*P);
-	if(return_value != 0) {
-		cout << "belt semaphore initialization failed\n";
-	}
+	belt = new sem_t[N];
+    for(int i = 0; i < N; i++){
+        return_value = sem_init(&belt[i],0,P);
+        if(return_value != 0) {
+            cout << "belt semaphore initialization failed\n";
+        }
+    }
 	
 	// mutex initialization
 	// kiosk mutex
@@ -289,15 +271,6 @@ int main(void)
 		return_value = pthread_mutex_init(&kiosk_mutex[i],NULL);
 		if(return_value != 0) {
 			msg = "kiosk mutex " + to_string(i) + " initialization failed\n";
-			cout << msg;
-		}
-	}
-	//belt mutex
-	belt_mutex = new pthread_mutex_t[N];
-	for(int i = 0; i < N; i++){
-		return_value = pthread_mutex_init(&belt_mutex[i],NULL);
-		if(return_value != 0) {
-			msg = "security check mutex " + to_string(i) + " initialization failed\n";
 			cout << msg;
 		}
 	}
@@ -338,11 +311,12 @@ int main(void)
 	// initializing passenger thread
 	pthread_t passengers[number_of_passengers];
 	for(int i = 0; i < number_of_passengers; i++){
-		arrival_time = distribution(generator);
+		//arrival_time = distribution(generator);
+		arrival_time=  expon.operator() (rng);
 		sleep(arrival_time);
 
 		int* id = new int(i+1);
-		msg = "thread " + to_string(i+1) + " created at " + to_string(arrival_time) + "\n";
+		msg = "thread " + to_string(i+1) + " created after " + to_string(arrival_time) + "\n";
 		cout << msg;
 
 		return_value = pthread_create(&passengers[i], NULL, journey_by_air, (void*)id);
@@ -366,10 +340,12 @@ int main(void)
 		cout << "kiosk semaphore destruction failed\n";
 	}
 	//belt
-	return_value = sem_destroy(&belt);
-	if(return_value != 0) {
-		cout << "belt semaphore destruction failed\n";
-	}
+	for(int i = 0; i < N; i++){
+        return_value = sem_destroy(&belt[i]);
+        if(return_value != 0) {
+            cout << "belt semaphore initialization failed\n";
+        }
+    }
 	
 	// mutex destruction
 	// kiosk mutex
@@ -377,14 +353,6 @@ int main(void)
 		return_value = pthread_mutex_destroy(&kiosk_mutex[i]);
 		if(return_value != 0) {
 			cout << "kiosk mutex destruction failed\n";
-		}
-	}
-	//belt mutex
-	for(int i = 0; i < N; i++){
-		return_value = pthread_mutex_destroy(&belt_mutex[i]);
-		if(return_value != 0) {
-			msg = "belt mutex " + to_string(i) + " destruction failed\n";
-			cout << msg;
 		}
 	}
 	//boarding mutex
