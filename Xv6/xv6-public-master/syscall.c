@@ -103,6 +103,13 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_shutdown(void);
+extern int sys_add(void);
+extern int sys_incr(void);
+extern int sys_substr(void);
+extern int sys_substroccur(void);
+extern int sys_nahian(void);
+extern int sys_salsabil(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -126,6 +133,13 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_shutdown] sys_shutdown,
+[SYS_add] sys_add,
+[SYS_incr] sys_incr,
+[SYS_substr] sys_substr,
+[SYS_substroccur] sys_substroccur,
+[SYS_nahian] sys_nahian,
+[SYS_salsabil] sys_salsabil,
 };
 
 void

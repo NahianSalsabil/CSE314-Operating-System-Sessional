@@ -20,3 +20,10 @@
 #define SYS_link   19
 #define SYS_mkdir  20
 #define SYS_close  21
+#define SYS_shutdown 22
+#define SYS_add 23
+#define SYS_incr 24
+#define SYS_substr 25
+#define SYS_substroccur 26
+#define SYS_nahian 27
+#define SYS_salsabil 28
