@@ -1,157 +1,184 @@
-3 1 1
-2 3 2 3
-thread 1 created after 12
+4 2 3
+4 8 6 10
+thread 1 created after 6
 thread 2 created after 0
-Passenger 1 (VIP) has arrived at time 12
-Passenger 1 (VIP) has started self-check in at kiosk 1 at time 12
-Passenger 2 (VIP) has arrived at time 12
-Passenger 2 (VIP) has started self-check in at kiosk 2 at time 12
-Passenger 1 (VIP) has finished check in at time 14
-Passenger 1 (VIP) has started waiting for VIP channel at time 14
-Passenger 1 (VIP) has started walking through the VIP channel at time 14
-Passenger 2 (VIP) has finished check in at time 14
-Passenger 2 (VIP) has started waiting for VIP channel at time 14
-Passenger 2 (VIP) has started walking through the VIP channel at time 14
-thread 3 created after 3
-Passenger 3 (VIP) has arrived at time 15
-Passenger 3 (VIP) has started self-check in at kiosk 1 at time 15
-Passenger 1 (VIP) has crossed the VIP channel at time 17
-Passenger 1 (VIP) has started waiting to be boarded at time 17
-Passenger 1 (VIP) has started boarding the plane at time 17
-Passenger 2 (VIP) has crossed the VIP channel at time 17
-Passenger 2 (VIP) has started waiting to be boarded at time 17
-Passenger 3 (VIP) has finished check in at time 17
-Passenger 3 (VIP) has started waiting for VIP channel at time 17
-Passenger 3 (VIP) has started walking through the VIP channel at time 17
-Passenger 1 (VIP) has boarded the plane at time 19
-Passenger 2 (VIP) has started boarding the plane at time 19
-thread 4 created after 5
-Passenger 3 (VIP) has crossed the VIP channel at time 20
-Passenger 3 (VIP) has started waiting to be boarded at time 20
-Passenger 4 (VIP) has arrived at time 20
-Passenger 4 (VIP) has started self-check in at kiosk 1 at time 20
-thread 5 created after 0
-Passenger 5 has arrived at time 20
-Passenger 5 has started self-check in at kiosk 2 at time 20
-Passenger 2 (VIP) has boarded the plane at time 21
-Passenger 3 (VIP) has started boarding the plane at time 21
-Passenger 4 (VIP) has finished check in at time 22
-Passenger 4 (VIP) has started waiting for VIP channel at time 22
-Passenger 4 (VIP) has started walking through the VIP channel at time 22
-Passenger 5 has finished check in at time 22
-Passenger 5 has started waiting for security check at belt 1 from time 22
-Passenger 5 has started the security check at belt 1 at time 22
-Passenger 3 (VIP) has boarded the plane at time 23
-thread 6 created after 4
-thread 7 created after 0
-Passenger 6 (VIP) has arrived at time 24
-Passenger 6 (VIP) has started self-check in at kiosk 1 at time 24
-Passenger 7 has arrived at time 24
-Passenger 7 has started self-check in at kiosk 2 at time 24
-Passenger 4 (VIP) has crossed the VIP channel at time 25
-Passenger 4 (VIP) has started waiting to be boarded at time 25
-Passenger 4 (VIP) has started boarding the plane at time 25
-Passenger 5 has crossed the security check at time 25
-Passenger 5 has lost the boarding pass
-Passenger 5 has started waiting for the VIP channel right to left at time 25
-Passenger 5 has started walking through the VIP channel right to left at time 25
-thread 8 created after 1
-Passenger 8 (VIP) has arrived at time 25
-Passenger 8 (VIP) has started self-check in at kiosk 3 at time 25
-Passenger 6 (VIP) has finished check in at time 26
-Passenger 6 (VIP) has started waiting for VIP channel at time 26
-Passenger 7 has finished check in at time 26
-Passenger 7 has started waiting for security check at belt 1 from time 26
-Passenger 7 has started the security check at belt 1 at time 26
-Passenger 4 (VIP) has boarded the plane at time 27
-Passenger 8 (VIP) has finished check in at time 27
-Passenger 5 has crossed the VIP channel right to left at time 28
-Passenger 5 has started self-check in at special kiosk at time 28
-Passenger 6 (VIP) has started walking through the VIP channel at time 28
-Passenger 8 (VIP) has started waiting for VIP channel at time 28
-Passenger 8 (VIP) has started walking through the VIP channel at time 28
-Passenger 7 has crossed the security check at time 29
-Passenger 7 has lost the boarding pass
-Passenger 7 has started waiting for the VIP channel right to left at time 29
-Passenger 5 has finished check in at special kiosk at time 30
-thread 9 created after 6
-Passenger 6 (VIP) has crossed the VIP channel at time 31
-Passenger 6 (VIP) has started waiting to be boarded at time 31
-Passenger 6 (VIP) has started boarding the plane at time 31
-Passenger 8 (VIP) has crossed the VIP channel at time 31
-Passenger 8 (VIP) has started waiting to be boarded at time 31
-Passenger 7 has started walking through the VIP channel right to left at time 31
-Passenger 9 (VIP) has arrived at time 31
-Passenger 9 (VIP) has started self-check in at kiosk 1 at time 31
-Passenger 5 (VIP) has started waiting for VIP channel at time 31
-Passenger 6 (VIP) has boarded the plane at time 33
-Passenger 9 (VIP) has finished check in at time 33
-Passenger 8 (VIP) has started boarding the plane at time 33
-thread 10 created after 3
-(null)(null)(null)(null)Passenger 7 has crossed the VIP channel right to left at time 34
-Passenger 10 has arrived at time 34
-Passenger 10 has started self-check in at kiosk 2 at time 34
-Passenger 5 (VIP) has started walking through the VIP channel at time 34
-Passenger 7 has started self-check in at special kiosk at time 34
-Passenger 9 (VIP) has started waiting for VIP channel at time 34
-Passenger 9 (VIP) has started walking through the VIP channel at time 34
-Passenger 8 (VIP) has boarded the plane at time 35
-Passenger 7 has finished check in at special kiosk at time 36
-Passenger 10 has finished check in at time 36
-Passenger 7 (VIP) has started waiting for VIP channel at time 36
-Passenger 10 has started waiting for security check at belt 1 from time 36
-Passenger 7 (VIP) has started walking through the VIP channel at time 36
-Passenger 10 has started the security check at belt 1 at time 36
-Passenger 5 (VIP) has crossed the VIP channel at time 37
-Passenger 5 has lost the boarding pass
-Passenger 5 has started waiting for the VIP channel right to left at time 37
-Passenger 9 (VIP) has crossed the VIP channel at time 37
-Passenger 9 (VIP) has started waiting to be boarded at time 37
-Passenger 9 (VIP) has started boarding the plane at time 37
-Passenger 9 (VIP) has boarded the plane at time 39
-Passenger 7 (VIP) has crossed the VIP channel at time 39
-Passenger 10 has crossed the security check at time 39
-Passenger 10 has lost the boarding pass
-Passenger 10 has started waiting for the VIP channel right to left at time 39
-Passenger 7 has lost the boarding pass
-Passenger 7 has started waiting for the VIP channel right to left at time 39
-Passenger 5 has started walking through the VIP channel right to left at time 39
-Passenger 10 has started walking through the VIP channel right to left at time 39
-Passenger 7 has started walking through the VIP channel right to left at time 39
-Passenger 10 has crossed the VIP channel right to left at time 42
-Passenger 5 has crossed the VIP channel right to left at time 42
-Passenger 10 has started self-check in at special kiosk at time 42
-Passenger 7 has crossed the VIP channel right to left at time 42
-Passenger 10 has finished check in at special kiosk at time 44
-Passenger 10 (VIP) has started waiting for VIP channel at time 44
-Passenger 10 (VIP) has started walking through the VIP channel at time 44
-Passenger 5 has started self-check in at special kiosk at time 42
-Passenger 5 has finished check in at special kiosk at time 44
-Passenger 5 (VIP) has started waiting for VIP channel at time 46
-Passenger 5 (VIP) has started walking through the VIP channel at time 46
-Passenger 7 has started self-check in at special kiosk at time 42
-Passenger 10 (VIP) has crossed the VIP channel at time 47
-Passenger 10 has lost the boarding pass
-Passenger 10 has started waiting for the VIP channel right to left at time 47
-Passenger 7 has finished check in at special kiosk at time 44
-Passenger 5 (VIP) has crossed the VIP channel at time 49
-Passenger 5 has started waiting to be boarded at time 49
-Passenger 5 has started boarding the plane at time 49
-Passenger 10 has started walking through the VIP channel right to left at time 49
-Passenger 7 (VIP) has started waiting for VIP channel at time 49
-Passenger 5 has boarded the plane at time 51
-(null)(null)Passenger 10 has crossed the VIP channel right to left at time 52
-Passenger 7 (VIP) has started walking through the VIP channel at time 52
-Passenger 10 has started self-check in at special kiosk at time 52
-Passenger 10 has finished check in at special kiosk at time 54
-Passenger 10 (VIP) has started waiting for VIP channel at time 54
-Passenger 10 (VIP) has started walking through the VIP channel at time 54
-Passenger 7 (VIP) has crossed the VIP channel at time 55
-Passenger 7 has started waiting to be boarded at time 55
-Passenger 7 has started boarding the plane at time 55
-Passenger 7 has boarded the plane at time 57
-Passenger 10 (VIP) has crossed the VIP channel at time 57
-Passenger 10 has started waiting to be boarded at time 57
-Passenger 10 has started boarding the plane at time 57
-(null)(null)(null)Passenger 10 has boarded the plane at time 59
-(null)
+Passenger 1 has arrived at time 6
+Passenger 1 has started self-check in at kiosk 1 at time 6
+Passenger 2 (VIP) has arrived at time 6
+Passenger 2 (VIP) has started self-check in at kiosk 2 at time 6
+thread 3 created after 2
+Passenger 3 (VIP) has arrived at time 8
+Passenger 3 (VIP) has started self-check in at kiosk 3 at time 8
+thread 4 created after 0
+Passenger 4 has arrived at time 8
+Passenger 4 has started self-check in at kiosk 4 at time 8
+Passenger 1 has finished check in at time 10
+Passenger 1 has started waiting for security check at belt 2 from time 10
+Passenger 1 has started the security check at belt 2 at time 10
+Passenger 2 (VIP) has finished check in at time 10
+Passenger 2 (VIP) has started waiting for VIP channel at time 10
+Passenger 2 (VIP) has started walking through the VIP channel at time 10
+thread 5 created after 3
+Passenger 5 (VIP) has arrived at time 11
+Passenger 5 (VIP) has started self-check in at kiosk 1 at time 11
+Passenger 3 (VIP) has finished check in at time 12
+Passenger 3 (VIP) has started waiting for VIP channel at time 12
+Passenger 3 (VIP) has started walking through the VIP channel at time 12
+Passenger 4 has finished check in at time 12
+Passenger 4 has started waiting for security check at belt 2 from time 12
+Passenger 4 has started the security check at belt 2 at time 12
+thread 6 created after 1
+Passenger 6 (VIP) has arrived at time 12
+Passenger 6 (VIP) has started self-check in at kiosk 2 at time 12
+thread 7 created after 1
+Passenger 7 has arrived at time 13
+Passenger 7 has started self-check in at kiosk 3 at time 13
+Passenger 5 (VIP) has finished check in at time 15
+Passenger 5 (VIP) has started waiting for VIP channel at time 15
+Passenger 5 (VIP) has started walking through the VIP channel at time 15
+Passenger 6 (VIP) has finished check in at time 16
+Passenger 6 (VIP) has started waiting for VIP channel at time 16
+Passenger 6 (VIP) has started walking through the VIP channel at time 16
+thread 8 created after 3
+Passenger 8 (VIP) has arrived at time 16
+Passenger 8 (VIP) has started self-check in at kiosk 1 at time 16
+Passenger 7 has finished check in at time 17
+Passenger 7 has started waiting for security check at belt 1 from time 17
+Passenger 7 has started the security check at belt 1 at time 17
+Passenger 1 has crossed the security check at time 18
+Passenger 1 has lost the boarding pass
+Passenger 1 has started waiting for the VIP channel right to left at time 18
+thread 9 created after 3
+Passenger 9 (VIP) has arrived at time 19
+Passenger 9 (VIP) has started self-check in at kiosk 2 at time 19
+Passenger 2 (VIP) has crossed the VIP channel at time 20
+Passenger 2 (VIP) has started waiting to be boarded at time 20
+Passenger 2 (VIP) has started boarding the plane at time 20
+Passenger 4 has crossed the security check at time 20
+Passenger 4 has started waiting to be boarded at time 20
+Passenger 8 (VIP) has finished check in at time 20
+thread 10 created after 2
+Passenger 10 has arrived at time 21
+Passenger 10 has started self-check in at kiosk 3 at time 21
+Passenger 3 (VIP) has crossed the VIP channel at time 22
+Passenger 3 (VIP) has started waiting to be boarded at time 22
+Passenger 9 (VIP) has finished check in at time 23
+Passenger 5 (VIP) has crossed the VIP channel at time 25
+Passenger 5 (VIP) has lost the boarding pass
+Passenger 5 (VIP) has started waiting for the VIP channel right to left at time 25
+Passenger 7 has crossed the security check at time 25
+Passenger 7 has started waiting to be boarded at time 25
+Passenger 10 has finished check in at time 25
+Passenger 10 has started waiting for security check at belt 1 from time 25
+Passenger 10 has started the security check at belt 1 at time 25
+Passenger 2 (VIP) has boarded the plane at time 26
+Passenger 4 has started boarding the plane at time 26
+Passenger 6 (VIP) has crossed the VIP channel at time 26
+Passenger 6 (VIP) has started waiting to be boarded at time 26
+Passenger 1 has started walking through the VIP channel right to left at time 26
+Passenger 8 (VIP) has started waiting for VIP channel at time 26
+Passenger 4 has boarded the plane at time 32
+Passenger 3 (VIP) has started boarding the plane at time 32
+Passenger 10 has crossed the security check at time 33
+Passenger 10 has started waiting to be boarded at time 33
+Passenger 1 has crossed the VIP channel right to left at time 36
+Passenger 1 has started self-check in at special kiosk at time 36
+Passenger 8 (VIP) has started walking through the VIP channel at time 36
+Passenger 9 (VIP) has started waiting for VIP channel at time 36
+Passenger 9 (VIP) has started walking through the VIP channel at time 36
+Passenger 3 (VIP) has boarded the plane at time 38
+Passenger 7 has started boarding the plane at time 38
+Passenger 1 has finished check in at special kiosk at time 40
+Passenger 7 has boarded the plane at time 44
+Passenger 6 (VIP) has started boarding the plane at time 44
+Passenger 8 (VIP) has crossed the VIP channel at time 46
+Passenger 8 (VIP) has lost the boarding pass
+Passenger 8 (VIP) has started waiting for the VIP channel right to left at time 46
+Passenger 9 (VIP) has crossed the VIP channel at time 46
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 46
+Passenger 5 (VIP) has started walking through the VIP channel right to left at time 46
+Passenger 1 (VIP) has started waiting for VIP channel at time 46
+Passenger 6 (VIP) has boarded the plane at time 50
+Passenger 10 has started boarding the plane at time 50
+Passenger 5 (VIP) has crossed the VIP channel right to left at time 56
+Passenger 5 (VIP) has started self-check in at special kiosk at time 56
+Passenger 1 (VIP) has started walking through the VIP channel at time 56
+Passenger 10 has boarded the plane at time 56
+Passenger 5 (VIP) has finished check in at special kiosk at time 60
+Passenger 1 (VIP) has crossed the VIP channel at time 66
+Passenger 1 has started waiting to be boarded at time 66
+Passenger 1 has started boarding the plane at time 66
+Passenger 8 (VIP) has started walking through the VIP channel right to left at time 66
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 66
+Passenger 5 (VIP) has started waiting for VIP channel at time 66
+Passenger 1 has boarded the plane at time 72
+(null)(null)(null)(null)Passenger 8 (VIP) has crossed the VIP channel right to left at time 76
+Passenger 9 (VIP) has crossed the VIP channel right to left at time 76
+Passenger 8 (VIP) has started self-check in at special kiosk at time 76
+Passenger 5 (VIP) has started walking through the VIP channel at time 76
+Passenger 8 (VIP) has finished check in at special kiosk at time 80
+Passenger 8 (VIP) has started waiting for VIP channel at time 80
+Passenger 8 (VIP) has started walking through the VIP channel at time 80
+Passenger 9 (VIP) has started self-check in at special kiosk at time 76
+Passenger 9 (VIP) has finished check in at special kiosk at time 80
+Passenger 9 (VIP) has started waiting for VIP channel at time 84
+Passenger 9 (VIP) has started walking through the VIP channel at time 84
+Passenger 5 (VIP) has crossed the VIP channel at time 86
+Passenger 5 (VIP) has started waiting to be boarded at time 86
+Passenger 5 (VIP) has started boarding the plane at time 86
+Passenger 8 (VIP) has crossed the VIP channel at time 90
+Passenger 8 (VIP) has started waiting to be boarded at time 90
+Passenger 5 (VIP) has boarded the plane at time 92
+Passenger 8 (VIP) has started boarding the plane at time 92
+(null)(null)(null)Passenger 9 (VIP) has crossed the VIP channel at time 94
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 94
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 94
+Passenger 8 (VIP) has boarded the plane at time 98
+(null)Passenger 9 (VIP) has crossed the VIP channel right to left at time 104
+Passenger 9 (VIP) has started self-check in at special kiosk at time 104
+Passenger 9 (VIP) has finished check in at special kiosk at time 108
+Passenger 9 (VIP) has started waiting for VIP channel at time 108
+Passenger 9 (VIP) has started walking through the VIP channel at time 108
+Passenger 9 (VIP) has crossed the VIP channel at time 118
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 118
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 118
+Passenger 9 (VIP) has crossed the VIP channel right to left at time 128
+Passenger 9 (VIP) has started self-check in at special kiosk at time 128
+Passenger 9 (VIP) has finished check in at special kiosk at time 132
+Passenger 9 (VIP) has started waiting for VIP channel at time 132
+Passenger 9 (VIP) has started walking through the VIP channel at time 132
+Passenger 9 (VIP) has crossed the VIP channel at time 142
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 142
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 142
+Passenger 9 (VIP) has crossed the VIP channel right to left at time 152
+Passenger 9 (VIP) has started self-check in at special kiosk at time 152
+Passenger 9 (VIP) has finished check in at special kiosk at time 156
+Passenger 9 (VIP) has started waiting for VIP channel at time 156
+Passenger 9 (VIP) has started walking through the VIP channel at time 156
+Passenger 9 (VIP) has crossed the VIP channel at time 166
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 166
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 166
+Passenger 9 (VIP) has crossed the VIP channel right to left at time 176
+Passenger 9 (VIP) has started self-check in at special kiosk at time 176
+Passenger 9 (VIP) has finished check in at special kiosk at time 180
+Passenger 9 (VIP) has started waiting for VIP channel at time 180
+Passenger 9 (VIP) has started walking through the VIP channel at time 180
+Passenger 9 (VIP) has crossed the VIP channel at time 190
+Passenger 9 (VIP) has lost the boarding pass
+Passenger 9 (VIP) has started waiting for the VIP channel right to left at time 190
+Passenger 9 (VIP) has started walking through the VIP channel right to left at time 190
+Passenger 9 (VIP) has crossed the VIP channel right to left at time 200
+Passenger 9 (VIP) has started self-check in at special kiosk at time 200
+Passenger 9 (VIP) has finished check in at special kiosk at time 204
+Passenger 9 (VIP) has started waiting for VIP channel at time 204
+Passenger 9 (VIP) has started walking through the VIP channel at time 204
+Passenger 9 (VIP) has crossed the VIP channel at time 214
+Passenger 9 (VIP) has started waiting to be boarded at time 214
+Passenger 9 (VIP) has started boarding the plane at time 214
+Passenger 9 (VIP) has boarded the plane at time 220
+(null)(null)
